@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { Button } from "~/components/ui/button";
 import { Textarea } from "~/components/ui/textarea";
-import { Mic, Send, X } from "lucide-react";
+import { Send } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,7 +11,6 @@ import {
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
 import { AudioRecorder } from "../audio/audio-recorder";
-import { FileUploadZone } from "../audio/file-upload-zone";
 import { toast } from "sonner";
 
 export type TherapeuticFramework =

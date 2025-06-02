@@ -42,6 +42,7 @@ export function ChatMessage({
       className={cn(
         "flex w-full gap-3 px-4 py-6",
         isAI ? "bg-muted/50" : "bg-background",
+        !isAI && "flex-row-reverse",
       )}
     >
       {/* Avatar */}
@@ -60,8 +61,8 @@ export function ChatMessage({
       </Avatar>
 
       {/* Message content */}
-      <div className="flex-1 space-y-2">
-        <div className="flex items-center gap-2">
+      <div className={cn("flex-1 space-y-2", !isAI && "text-right")}>
+        <div className={cn("flex items-center gap-2", !isAI && "justify-end")}>
           <span className="font-medium">{isAI ? "InsightSpark" : "You"}</span>
           <span className="text-muted-foreground text-xs">{formattedTime}</span>
         </div>
@@ -70,7 +71,7 @@ export function ChatMessage({
           {isLoading ? (
             <LoadingMessage />
           ) : typeof content === "string" ? (
-            <div className="flex items-start">
+            <div className={cn("flex items-start", !isAI && "justify-end")}>
               <p className="whitespace-pre-wrap">{content}</p>
               {isStreaming && (
                 <span className="text-primary ml-1 animate-pulse">▋</span>

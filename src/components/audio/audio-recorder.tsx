@@ -3,7 +3,6 @@
 import React, { useRef, useState, useEffect } from "react";
 import { Button } from "~/components/ui/button";
 import { Mic, Pause, StopCircle } from "lucide-react";
-import { WaveformVisualizer } from "./waveform-visualizer";
 
 export interface AudioRecorderProps {
   onRecordingComplete: (audioBlob: Blob) => void;
