@@ -9,8 +9,11 @@
 import { initTRPC } from "@trpc/server";
 import superjson from "superjson";
 import { ZodError } from "zod";
-
+import { env } from "~/env";
 import { db } from "~/server/db";
+
+import OpenAI from "openai";
+import { GoogleGenAI } from "@google/genai";
 
 /**
  * 1. CONTEXT
@@ -25,8 +28,18 @@ import { db } from "~/server/db";
  * @see https://trpc.io/docs/server/context
  */
 export const createTRPCContext = async (opts: { headers: Headers }) => {
+  const openai = new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY,
+  });
+
+  const gemini = new GoogleGenAI({
+    apiKey: process.env.GOOGLE_API,
+  });
+
   return {
     db,
+    openai,
+    gemini,
     ...opts,
   };
 };

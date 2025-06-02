@@ -1,6 +1,6 @@
 ## Product Requirements Document: InsightSpark
 
-**Version:** 1.1  
+**Version:** 1.2  
 **Date:** June 1, 2025  
 **Author:** Product Team  
 **Product Name:** InsightSpark (Working Title)
@@ -75,25 +75,29 @@ InsightSpark is a web application designed to help individual, beginner content 
 - Alongside the main points, the AI will generate several (e.g., 3-5) reflective questions designed to guide the user towards deeper insights.
 - The questioning framework will incorporate techniques from the user-selected therapeutic approach:
 
-  1. **Socratic Questioning:** 
+  1. **Socratic Questioning:**
+
      - Asking open-ended questions that challenge assumptions
      - Exploring implications and consequences of ideas
      - Examining multiple perspectives on a topic
      - Example: "You mentioned X is important to your audience; what evidence have you seen that supports this?"
 
   2. **Motivational Interviewing Techniques:**
+
      - Asking evocative questions that elicit "change talk"
      - Using reflective listening to clarify and deepen understanding
      - Exploring ambivalence about ideas to find authentic positions
      - Example: "On a scale of 1-10, how confident are you about this insight? What would make it a 10?"
 
   3. **Narrative Therapy Approaches:**
+
      - Externalizing problems/topics from the person
      - Identifying unique outcomes or exceptions to dominant stories
      - Helping users re-author their narrative around a topic
      - Example: "If this challenge had a name, what would it be? When has this challenge been less powerful in your life?"
 
   4. **Solution-Focused Brief Therapy Elements:**
+
      - Miracle questions to envision ideal outcomes
      - Exception-finding questions to identify when problems don't exist
      - Scaling questions to measure progress and set goals
@@ -171,7 +175,9 @@ InsightSpark is a web application designed to help individual, beginner content 
 
 #### 6.2. AI & Audio Processing:
 
-- **AI Model:** Claude 3.5 Sonnet via Anthropic API
+- **AI Model:**
+  - **Development:** Gemini 2.5 Flash via Google AI API
+  - **Production:** Claude 3.5 Sonnet via Anthropic API
 - **Transcription:** OpenAI Whisper API
 - **Audio Processing:** Capability to handle up to 10 minutes of audio per recording or 500MB per upload
 - **Supported Audio Formats:** MP3, WAV, M4A, and other common formats
@@ -342,4 +348,4 @@ InsightSpark is a web application designed to help individual, beginner content 
 - Advanced monitoring and error tracking.
 - Data caching strategies.
 - Advanced anonymous user rate limiting (beyond localStorage).
-\`\`\`
+  \`\`\`
