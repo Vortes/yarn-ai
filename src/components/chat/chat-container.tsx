@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { useUser } from "@clerk/nextjs";
 import { ScrollArea } from "~/components/ui/scroll-area";
 import { MainChatLayout } from "~/components/chat/main-chat-layout";
 import {
@@ -36,31 +37,6 @@ const mockSessions: ChatSession[] = [
   },
 ];
 
-const initialMessages = [
-  {
-    id: "1",
-    type: "user" as const,
-    content:
-      "I've been feeling anxious about my upcoming presentation at work.",
-    timestamp: new Date("2025-06-01T10:00:00"),
-  },
-  {
-    id: "2",
-    type: "ai" as const,
-    content: {
-      summary:
-        "You're experiencing anxiety about an upcoming work presentation, which is a common response to performance situations.",
-      questions: [
-        "When is your presentation scheduled?",
-        "What aspects of the presentation make you most anxious?",
-        "Have you experienced similar anxiety before presentations in the past?",
-        "What strategies have you tried so far to manage this anxiety?",
-      ],
-    },
-    timestamp: new Date("2025-06-01T10:01:00"),
-  },
-];
-
 export function ChatContainer() {
   // Chat state
   type AIResponse = {
@@ -80,8 +56,7 @@ export function ChatContainer() {
     content: AIResponse;
     timestamp: Date;
   };
-  const [messages, setMessages] =
-    useState<(UserMessage | AIMessage)[]>(initialMessages);
+  const [messages, setMessages] = useState<(UserMessage | AIMessage)[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
   const [showOutline, setShowOutline] = useState(false);
   const [outline, setOutline] = useState<ContentOutline | null>(null);
@@ -94,6 +69,9 @@ export function ChatContainer() {
   } | null>(null);
   const [streamingResponse, setStreamingResponse] = useState<string>("");
   const [isStreamingActive, setIsStreamingActive] = useState(false);
+
+  // Get current user data
+  const { user } = useUser();
 
   // tRPC hooks
   const transcribe = api.audio.transcribe.useMutation();
@@ -360,24 +338,37 @@ export function ChatContainer() {
       {/* Chat messages area - takes remaining space */}
       <ScrollArea className="min-h-0 flex-1">
         <div className="mx-auto max-w-4xl space-y-4 p-4">
-          {messages.map((message) => (
-            <ChatMessage
-              key={message.id}
-              type={message.type}
-              content={message.content}
-              timestamp={message.timestamp}
-            />
-          ))}
+          {messages.length === 0 ? (
+            <div className="flex min-h-[400px] items-center justify-center">
+              <div className="space-y-4 text-center">
+                <div className="text-foreground text-3xl font-bold">
+                  How can I help you ideate
+                  {user?.firstName ? `, ${user.firstName}` : ""}?
+                </div>
+              </div>
+            </div>
+          ) : (
+            <>
+              {messages.map((message) => (
+                <ChatMessage
+                  key={message.id}
+                  type={message.type}
+                  content={message.content}
+                  timestamp={message.timestamp}
+                />
+              ))}
 
-          {/* Streaming AI response */}
-          {isStreamingActive && streamingResponse && (
-            <ChatMessage
-              key="streaming"
-              type="ai"
-              content={{ summary: streamingResponse }}
-              timestamp={new Date()}
-              isStreaming={true}
-            />
+              {/* Streaming AI response */}
+              {isStreamingActive && streamingResponse && (
+                <ChatMessage
+                  key="streaming"
+                  type="ai"
+                  content={{ summary: streamingResponse }}
+                  timestamp={new Date()}
+                  isStreaming={true}
+                />
+              )}
+            </>
           )}
         </div>
       </ScrollArea>

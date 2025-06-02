@@ -1,4 +1,3 @@
-import { postRouter } from "~/server/api/routers/post";
 import { audioRouter } from "~/server/api/routers/audio";
 import { textRouter } from "~/server/api/routers/text";
 import { synthesisRouter } from "~/server/api/routers/synthesis";
@@ -13,7 +12,6 @@ import { createCallerFactory, createTRPCRouter } from "~/server/api/trpc";
  * All routers added in /api/routers should be manually added here.
  */
 export const appRouter = createTRPCRouter({
-  post: postRouter,
   audio: audioRouter,
   text: textRouter,
   synthesis: synthesisRouter,

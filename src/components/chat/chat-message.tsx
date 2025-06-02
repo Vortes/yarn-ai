@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import { cn } from "~/lib/utils";
 import type { AIResponse } from "./ai-response-renderer";
 import { AIResponseRenderer } from "./ai-response-renderer";
@@ -45,25 +44,10 @@ export function ChatMessage({
         !isAI && "flex-row-reverse",
       )}
     >
-      {/* Avatar */}
-      <Avatar className="h-8 w-8">
-        {isAI ? (
-          <>
-            <AvatarFallback>AI</AvatarFallback>
-            <AvatarImage src="/ai-avatar.png" alt="AI Assistant" />
-          </>
-        ) : (
-          <>
-            <AvatarFallback>U</AvatarFallback>
-            <AvatarImage src="/user-avatar.png" alt="User" />
-          </>
-        )}
-      </Avatar>
-
       {/* Message content */}
       <div className={cn("flex-1 space-y-2", !isAI && "text-right")}>
         <div className={cn("flex items-center gap-2", !isAI && "justify-end")}>
-          <span className="font-medium">{isAI ? "InsightSpark" : "You"}</span>
+          <span className="font-medium">{isAI ? "" : "You"}</span>
           <span className="text-muted-foreground text-xs">{formattedTime}</span>
         </div>
 
