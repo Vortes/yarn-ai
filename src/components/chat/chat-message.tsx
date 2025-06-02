@@ -41,7 +41,7 @@ export function ChatMessage({
     <div
       className={cn(
         "flex w-full gap-3 px-4 py-6",
-        isAI ? "bg-muted/50" : "bg-background",
+        isAI ? "bg-muted/30 rounded-2xl" : "bg-background",
         !isAI && "flex-row-reverse",
       )}
     >
