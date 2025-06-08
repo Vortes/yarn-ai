@@ -51,8 +51,6 @@ export function ChatContainer() {
 
   const [messages, setMessages] = useState<(UserMessage | AIMessage)[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
-  const [showOutline, setShowOutline] = useState(false);
-  const [outline, setOutline] = useState<ContentOutline | null>(null);
 
   // Streaming state
   const [streamingText, setStreamingText] = useState<string | null>(null);

@@ -2,29 +2,11 @@ import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 
 // Define streaming update types
-const streamUpdateSchema = z.discriminatedUnion("type", [
-  z.object({
-    type: z.literal("thinking"),
-    message: z.string(),
-  }),
-  z.object({
-    type: z.literal("streaming"),
-    chunk: z.string(),
-  }),
-  z.object({
-    type: z.literal("complete"),
-    result: z.object({
-      summary: z.string(),
-      questions: z.array(z.string()),
-    }),
-  }),
-  z.object({
-    type: z.literal("error"),
-    error: z.string(),
-  }),
-]);
-
-export type StreamUpdate = z.infer<typeof streamUpdateSchema>;
+export type StreamUpdate =
+  | { type: "thinking"; message: string }
+  | { type: "streaming"; chunk: string }
+  | { type: "complete"; result: { summary: string; questions: string[] } }
+  | { type: "error"; error: string };
 
 /**
  * Text Processing Service with Server-Sent Events

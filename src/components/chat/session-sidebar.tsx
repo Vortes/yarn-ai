@@ -3,8 +3,7 @@
 import React from "react";
 import { Button } from "~/components/ui/button";
 import { ScrollArea } from "~/components/ui/scroll-area";
-import { Separator } from "~/components/ui/separator";
-import { PlusCircle, MessageSquare } from "lucide-react";
+import { MessageSquare } from "lucide-react";
 import { cn } from "~/lib/utils";
 import { ThemeToggle } from "~/components/theme-toggle";
 import { UserProfile } from "~/components/auth/user-profile";

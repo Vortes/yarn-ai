@@ -2,22 +2,20 @@ import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 
 // Session tracking schema
-const sessionStatsSchema = z.object({
-  tokenUsage: z.object({
-    whisper: z.number(),
-    gemini: z.number(),
-  }),
-  apiLatency: z.object({
-    whisper: z.number(),
-    gemini: z.number(),
-  }),
-  errorCounts: z.object({
-    whisper: z.number(),
-    gemini: z.number(),
-  }),
-});
-
-type SessionStats = z.infer<typeof sessionStatsSchema>;
+type SessionStats = {
+  tokenUsage: {
+    whisper: number;
+    gemini: number;
+  };
+  apiLatency: {
+    whisper: number;
+    gemini: number;
+  };
+  errorCounts: {
+    whisper: number;
+    gemini: number;
+  };
+};
 
 /**
  * Session Management and Analytics
@@ -32,7 +30,7 @@ export const sessionRouter = createTRPCRouter({
         tempId: z.string().optional(),
       }),
     )
-    .mutation(async ({ input, ctx }) => {
+    .mutation(async ({ input }) => {
       try {
         // Validate that either userId or tempId is provided
         if (!input.userId && !input.tempId) {
@@ -150,7 +148,7 @@ export const sessionRouter = createTRPCRouter({
         userId: z.string().optional(),
       }),
     )
-    .query(async ({ input }) => {
+    .query(async () => {
       try {
         // In a real implementation, we would query the database for actual metrics
         // For this demo, we'll return sample metrics

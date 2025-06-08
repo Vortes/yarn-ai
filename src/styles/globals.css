@@ -14,6 +14,7 @@
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
   --color-background: var(--background);
+  --color-background-secondary: var(--background-secondary);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);
@@ -77,12 +78,14 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
-  --background: oklch(1 0 0);
+  --background: oklch(96.72% 0.000 0);
+  --background-secondary: oklch(100.00% 0.000 0);
   --foreground: oklch(0.145 0 0);
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
+  --background: oklch(17.8% 0% 89.876%);
+  --background-secondary: oklch(20.46% 0.000 0);
   --foreground: oklch(0.985 0 0);
   --card: oklch(0.205 0 0);
   --card-foreground: oklch(0.985 0 0);
@@ -131,4 +134,11 @@
 
 .animation-delay-400 {
   animation-delay: 400ms;
+}
+
+/* Noise texture utility */
+.noise-bg-subtle {
+  background-image: 
+    radial-gradient(circle at 1px 1px, oklch(from var(--foreground) l c h / 0.015) 1px, transparent 0);
+  background-size: 3px 3px;
 }

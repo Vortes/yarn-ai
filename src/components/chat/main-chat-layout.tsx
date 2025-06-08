@@ -3,7 +3,6 @@
 import React, { useState } from "react";
 import { Sheet, SheetContent, SheetTrigger } from "~/components/ui/sheet";
 import { Button } from "~/components/ui/button";
-import { ScrollArea } from "~/components/ui/scroll-area";
 import { Menu } from "lucide-react";
 
 interface MainChatLayoutProps {
@@ -18,7 +17,7 @@ export function MainChatLayout({
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   return (
-    <div className="flex h-screen">
+    <div className="bg-background flex h-screen">
       {/* Mobile sidebar */}
       <Sheet open={isSidebarOpen} onOpenChange={setIsSidebarOpen}>
         <SheetContent side="left" className="w-[280px] p-0">
@@ -33,7 +32,7 @@ export function MainChatLayout({
 
       {/* Main content */}
       <main className="flex min-h-0 flex-1 flex-col p-2.5">
-        <div className="h-full w-full rounded-xl border">
+        <div className="bg-background-secondary noise-bg-subtle h-full w-full rounded-xl border">
           {/* Mobile sidebar trigger */}
           <div className="flex p-4 md:hidden">
             <Sheet open={isSidebarOpen} onOpenChange={setIsSidebarOpen}>
