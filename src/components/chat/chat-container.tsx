@@ -12,6 +12,7 @@ import { ChatMessage } from "~/components/chat/chat-message";
 import { ChatInput } from "~/components/chat/chat-input";
 import { SessionCounter } from "~/components/ui/session-counter";
 import { UserProfile } from "~/components/auth/user-profile";
+import { ThemeToggle } from "~/components/theme-toggle";
 import { ContentOutlineDisplay } from "./content-outline-display";
 import type { ContentOutline } from "./content-outline-display";
 import { toast } from "sonner";
@@ -162,6 +163,7 @@ export function ChatContainer() {
       headerContent={
         <div className="flex items-center gap-4">
           <SessionCounter used={2} total={5} tier="free" />
+          <ThemeToggle />
           <UserProfile />
         </div>
       }
