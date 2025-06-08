@@ -9,10 +9,7 @@ import {
   type ChatSession,
 } from "~/components/chat/session-sidebar";
 import { ChatMessage } from "~/components/chat/chat-message";
-import {
-  ChatInput,
-  type TherapeuticFramework,
-} from "~/components/chat/chat-input";
+import { ChatInput } from "~/components/chat/chat-input";
 import { SessionCounter } from "~/components/ui/session-counter";
 import { UserProfile } from "~/components/auth/user-profile";
 import { ContentOutlineDisplay } from "./content-outline-display";
@@ -27,13 +24,11 @@ const mockSessions: ChatSession[] = [
     id: "1",
     title: "First conversation",
     date: new Date("2025-06-01"),
-    framework: "Cognitive Behavioral",
   },
   {
     id: "2",
     title: "Follow-up session",
     date: new Date("2025-06-03"),
-    framework: "Mindfulness-Based",
   },
 ];
 
@@ -56,116 +51,32 @@ export function ChatContainer() {
     content: AIResponse;
     timestamp: Date;
   };
+
   const [messages, setMessages] = useState<(UserMessage | AIMessage)[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
   const [showOutline, setShowOutline] = useState(false);
   const [outline, setOutline] = useState<ContentOutline | null>(null);
-  const [streamingAudioUrl, setStreamingAudioUrl] = useState<string | null>(
-    null,
-  );
-  const [streamingText, setStreamingText] = useState<{
-    text: string;
-    framework: string;
-  } | null>(null);
+
+  // Streaming state
+  const [streamingText, setStreamingText] = useState<string | null>(null);
   const [streamingResponse, setStreamingResponse] = useState<string>("");
   const [isStreamingActive, setIsStreamingActive] = useState(false);
 
   // Get current user data
   const { user } = useUser();
 
-  // tRPC hooks
-  const transcribe = api.audio.transcribe.useMutation();
-  const synthesize = api.synthesis.generateInitialInsights.useMutation();
-  const generateOutline = api.outline.generateContentOutline.useMutation();
-
-  // SSE subscription for audio processing
-  api.audio.processAudioStream.useSubscription(
-    streamingAudioUrl
-      ? {
-          audioFileUrl: streamingAudioUrl,
-          isPremium: false, // TODO: Get from user subscription status
-        }
-      : skipToken,
-    {
-      onData: (update) => {
-        switch (update.type) {
-          case "uploading":
-            break;
-          case "transcribing":
-            break;
-          case "analyzing":
-            break;
-          case "generating":
-            setIsStreamingActive(true);
-            setStreamingResponse("");
-            break;
-          case "streaming_summary":
-            if (!update.isComplete) {
-              setStreamingResponse((prev) => prev + update.chunk);
-            } else {
-              setIsStreamingActive(false);
-            }
-            break;
-          case "complete":
-            setIsStreamingActive(false);
-            // Add AI response to chat
-            if (update.result) {
-              setMessages((msgs) => [
-                ...msgs,
-                {
-                  id: Date.now().toString() + "-ai",
-                  type: "ai",
-                  content: {
-                    summary: update.result.summary,
-                    questions: update.result.questions,
-                  },
-                  timestamp: new Date(),
-                },
-              ]);
-            }
-            setIsProcessing(false);
-            setStreamingAudioUrl(null);
-            setStreamingResponse("");
-            break;
-          case "error":
-            setIsProcessing(false);
-            setStreamingAudioUrl(null);
-            setIsStreamingActive(false);
-            setStreamingResponse("");
-            toast.error(update.error);
-            break;
-        }
-      },
-      onError: (error) => {
-        setIsProcessing(false);
-        setStreamingAudioUrl(null);
-        setIsStreamingActive(false);
-        setStreamingResponse("");
-        toast.error(error.message || "Streaming failed");
-      },
-    },
-  );
-
   // SSE subscription for text processing
   api.text.processTextStream.useSubscription(
-    streamingText
-      ? { text: streamingText.text, framework: streamingText.framework }
-      : skipToken,
+    streamingText ? { text: streamingText } : skipToken,
     {
       onData: (update) => {
         switch (update.type) {
-          case "analyzing":
-            break;
-          case "generating":
+          case "thinking":
             setIsStreamingActive(true);
             setStreamingResponse("");
             break;
-          case "streaming_summary":
-            if (!update.isComplete) {
-              setStreamingResponse((prev) => prev + update.chunk);
-            } else {
-              setIsStreamingActive(false);
-            }
+          case "streaming":
+            setStreamingResponse((prev) => prev + update.chunk);
             break;
           case "complete":
             setIsStreamingActive(false);
@@ -216,10 +127,7 @@ export function ChatContainer() {
     console.log("Creating new session");
   };
 
-  const handleSendMessage = (
-    message: string,
-    framework: TherapeuticFramework,
-  ) => {
+  const handleSendMessage = async (message: string) => {
     // Add user message to chat
     setMessages((msgs) => [
       ...msgs,
@@ -231,91 +139,14 @@ export function ChatContainer() {
       },
     ]);
 
-    // Start AI processing with streaming
+    // Start streaming
     setIsProcessing(true);
-    setStreamingText({ text: message, framework });
+    setStreamingText(message);
   };
 
-  // Mock upload step
-  const mockUpload = async (file: Blob) => {
-    await new Promise((res) => setTimeout(res, 1200));
-    return "https://mock.upload/audio-file.webm";
-  };
-
-  // Audio input async flow with SSE streaming
-  const handleSendAudio = async (audioBlob: Blob) => {
-    setIsProcessing(true);
-
-    try {
-      // 1. Mock upload
-      const fileUrl = await mockUpload(audioBlob);
-
-      // 2. Start SSE streaming by setting the URL
-      setStreamingAudioUrl(fileUrl);
-    } catch (err: unknown) {
-      setIsProcessing(false);
-      const errorMessage =
-        err instanceof Error ? err.message : "Audio processing failed";
-      toast.error(errorMessage);
-    }
-  };
-
-  // Outline generation async flow
+  // Outline generation - simplified
   const handleGenerateOutline = async () => {
-    setIsProcessing(true);
-    try {
-      // For demo, just use the last AI summary
-      const lastAI = [...messages]
-        .reverse()
-        .find(
-          (m) =>
-            m.type === "ai" &&
-            typeof m.content === "object" &&
-            m.content.summary,
-        );
-      const summary =
-        lastAI && typeof lastAI.content === "object" && lastAI.content.summary
-          ? lastAI.content.summary
-          : "Conversation summary";
-      const outlineRes = await generateOutline.mutateAsync({
-        conversationSummary: summary,
-      });
-      if (!outlineRes.success || !outlineRes.outline)
-        throw new Error(outlineRes.error ?? "Outline generation failed");
-      setOutline({
-        title: "Generated Outline",
-        sections: [
-          { heading: "Hook", content: outlineRes.outline.hook ?? "" },
-          {
-            heading: "Main Points",
-            content: Array.isArray(outlineRes.outline.mainPoints)
-              ? outlineRes.outline.mainPoints.join("\n")
-              : "",
-          },
-          outlineRes.outline.callToAction
-            ? {
-                heading: "Call to Action",
-                content: outlineRes.outline.callToAction,
-              }
-            : undefined,
-          {
-            heading: "Visual Ideas",
-            content: Array.isArray(outlineRes.outline.visualIdeas)
-              ? outlineRes.outline.visualIdeas.join("\n")
-              : "",
-          },
-        ].filter((section): section is { heading: string; content: string } =>
-          Boolean(section?.content),
-        ),
-      });
-      setShowOutline(true);
-      setIsProcessing(false);
-    } catch (err) {
-      setIsProcessing(false);
-      const errorMsg =
-        err instanceof Error ? err.message : "Outline generation failed";
-      toast.error(errorMsg);
-    }
+    toast.error("Outline generation not yet implemented");
   };
 
   return (
@@ -388,10 +219,7 @@ export function ChatContainer() {
 
       {/* Chat input area - always visible at bottom */}
       <div className="flex-shrink-0">
-        <ChatInput
-          onSendMessage={handleSendMessage}
-          onSendAudio={handleSendAudio}
-        />
+        <ChatInput onSendMessage={handleSendMessage} disabled={isProcessing} />
         <div className="mt-2 flex justify-end gap-2">
           <button
             className="text-xs underline"

@@ -16,8 +16,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "InsightSpark - AI-Powered Therapeutic Conversations",
-  description: "Have meaningful therapeutic conversations with AI assistance",
+  title: "InsightSpark - AI-Powered Content Ideation",
+  description:
+    "Have meaningful conversations with AI to generate content ideas",
 };
 
 export default function RootLayout({

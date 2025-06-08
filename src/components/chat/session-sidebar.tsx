@@ -10,7 +10,6 @@ export interface ChatSession {
   id: string;
   title: string;
   date: Date;
-  framework: string;
 }
 
 interface SessionSidebarProps {
@@ -63,8 +62,6 @@ export function SessionSidebar({
                         month: "short",
                         day: "numeric",
                       }).format(session.date)}
-                      {" · "}
-                      {session.framework}
                     </div>
                   </div>
                 </div>
