@@ -13,15 +13,23 @@ interface ChatInputProps {
 
 export function ChatInput({ onSendMessage, disabled = false }: ChatInputProps) {
   const [message, setMessage] = useState("");
-  const [shineOpacity, setShineOpacity] = useState(1);
+  const [shineOpacity, setShineOpacity] = useState(0);
 
-  // Start fade out after 4 seconds, completely fade by 5 seconds
   useEffect(() => {
-    const timer = setTimeout(() => {
+    // Ease in animation - start immediately
+    const fadeInTimer = setTimeout(() => {
+      setShineOpacity(1);
+    }, 100);
+
+    // Start fade out after 8 seconds
+    const fadeOutTimer = setTimeout(() => {
       setShineOpacity(0);
     }, 8000);
 
-    return () => clearTimeout(timer);
+    return () => {
+      clearTimeout(fadeInTimer);
+      clearTimeout(fadeOutTimer);
+    };
   }, []);
 
   const handleSendMessage = () => {
