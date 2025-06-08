@@ -20,13 +20,13 @@ export function MainChatLayout({
     <div className="bg-background flex h-screen">
       {/* Mobile sidebar */}
       <Sheet open={isSidebarOpen} onOpenChange={setIsSidebarOpen}>
-        <SheetContent side="left" className="w-[280px] p-0">
+        <SheetContent side="left" className="w-[250px] p-0">
           <div className="h-full py-4">{sidebarContent}</div>
         </SheetContent>
       </Sheet>
 
       {/* Desktop sidebar */}
-      <aside className="hidden w-[280px] md:block">
+      <aside className="hidden w-[250px] md:block">
         <div className="h-full py-4">{sidebarContent}</div>
       </aside>
 

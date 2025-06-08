@@ -8,9 +8,8 @@ import {
   SessionSidebar,
   type ChatSession,
 } from "~/components/chat/session-sidebar";
-import { ChatMessage } from "~/components/chat/ai-response-renderer";
 import { ChatInput } from "~/components/chat/chat-input";
-import type { ContentOutline } from "./ai-response-renderer";
+import { ChatMessage } from "./chat-message";
 import { toast } from "sonner";
 import { api } from "~/trpc/react";
 import { skipToken } from "@tanstack/react-query";
@@ -34,7 +33,6 @@ export function ChatContainer() {
   type AIResponse = {
     summary?: string;
     questions?: string[];
-    outline?: ContentOutline;
   };
   type UserMessage = {
     id: string;
@@ -157,8 +155,7 @@ export function ChatContainer() {
             <div className="flex min-h-[400px] items-center justify-center">
               <div className="space-y-4 text-center">
                 <div className="text-foreground/80 text-3xl font-bold">
-                  How can I help you ideate
-                  {user?.firstName ? `, ${user.firstName}` : ""}?
+                  How can I help you ideate?
                 </div>
               </div>
             </div>
