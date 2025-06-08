@@ -32,8 +32,8 @@ export function MainChatLayout({
       </aside>
 
       {/* Main content */}
-      <main className="flex min-h-0 flex-1 flex-col p-3">
-        <div className="bg-background h-full w-full rounded-xl border">
+      <main className="flex min-h-0 flex-1 flex-col p-2.5">
+        <div className="h-full w-full rounded-xl border">
           {/* Mobile sidebar trigger */}
           <div className="flex p-4 md:hidden">
             <Sheet open={isSidebarOpen} onOpenChange={setIsSidebarOpen}>

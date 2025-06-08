@@ -158,7 +158,7 @@ export function ChatContainer() {
           {messages.length === 0 ? (
             <div className="flex min-h-[400px] items-center justify-center">
               <div className="space-y-4 text-center">
-                <div className="text-foreground text-3xl font-bold">
+                <div className="text-foreground/80 text-3xl font-bold">
                   How can I help you ideate
                   {user?.firstName ? `, ${user.firstName}` : ""}?
                 </div>
