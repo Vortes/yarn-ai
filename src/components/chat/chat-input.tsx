@@ -1,9 +1,10 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "~/components/ui/button";
 import { Textarea } from "~/components/ui/textarea";
 import { Send } from "lucide-react";
+import { ShineBorder } from "../magicui/shine-border";
 
 interface ChatInputProps {
   onSendMessage: (message: string) => void;
@@ -12,6 +13,16 @@ interface ChatInputProps {
 
 export function ChatInput({ onSendMessage, disabled = false }: ChatInputProps) {
   const [message, setMessage] = useState("");
+  const [shineOpacity, setShineOpacity] = useState(1);
+
+  // Start fade out after 4 seconds, completely fade by 5 seconds
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShineOpacity(0);
+    }, 8000);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   const handleSendMessage = () => {
     if (message.trim()) {
@@ -28,8 +39,15 @@ export function ChatInput({ onSendMessage, disabled = false }: ChatInputProps) {
   };
 
   return (
-    <div className="bg-background-secondary mx-auto w-8/12 rounded-t-lg border border-b-0 p-4 backdrop-blur-3xl">
-      <div className="mx-auto flex max-w-4xl flex-col gap-4">
+    <div className="bg-background-secondary relative mx-auto w-8/12 overflow-hidden rounded-t-lg border border-b-0 p-4 backdrop-blur-3xl">
+      <ShineBorder
+        shineColor={["#A07CFE", "#FE8FB5", "#FFBE7B"]}
+        style={{
+          opacity: shineOpacity,
+          transition: "opacity 1s ease-out",
+        }}
+      />
+      <div className="relative z-10 mx-auto flex max-w-4xl flex-col gap-4">
         {/* Input area */}
         <div className="flex items-end gap-2">
           <Textarea
