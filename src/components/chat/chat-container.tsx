@@ -11,8 +11,6 @@ import {
 import { ChatMessage } from "~/components/chat/chat-message";
 import { ChatInput } from "~/components/chat/chat-input";
 import { SessionCounter } from "~/components/ui/session-counter";
-import { UserProfile } from "~/components/auth/user-profile";
-import { ThemeToggle } from "~/components/theme-toggle";
 import { ContentOutlineDisplay } from "./content-outline-display";
 import type { ContentOutline } from "./content-outline-display";
 import { toast } from "sonner";
@@ -160,13 +158,6 @@ export function ChatContainer() {
           onNewSession={handleNewSession}
         />
       }
-      headerContent={
-        <div className="flex items-center gap-4">
-          <SessionCounter used={2} total={5} tier="free" />
-          <ThemeToggle />
-          <UserProfile />
-        </div>
-      }
     >
       {/* Chat messages area - takes remaining space */}
       <ScrollArea className="min-h-0 flex-1">
@@ -222,15 +213,6 @@ export function ChatContainer() {
       {/* Chat input area - always visible at bottom */}
       <div className="flex-shrink-0">
         <ChatInput onSendMessage={handleSendMessage} disabled={isProcessing} />
-        <div className="mt-2 flex justify-end gap-2">
-          <button
-            className="text-xs underline"
-            onClick={handleGenerateOutline}
-            disabled={isProcessing}
-          >
-            Generate Outline
-          </button>
-        </div>
       </div>
     </MainChatLayout>
   );

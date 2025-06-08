@@ -3,8 +3,11 @@
 import React from "react";
 import { Button } from "~/components/ui/button";
 import { ScrollArea } from "~/components/ui/scroll-area";
+import { Separator } from "~/components/ui/separator";
 import { PlusCircle, MessageSquare } from "lucide-react";
 import { cn } from "~/lib/utils";
+import { ThemeToggle } from "~/components/theme-toggle";
+import { UserProfile } from "~/components/auth/user-profile";
 
 export interface ChatSession {
   id: string;
@@ -27,16 +30,15 @@ export function SessionSidebar({
 }: SessionSidebarProps) {
   return (
     <div className="flex h-full flex-col">
-      <div className="flex items-center justify-between p-4">
-        <h2 className="text-lg font-semibold">Sessions</h2>
+      <div className="flex flex-col items-center justify-between px-4">
+        <h2 className="text-lg font-semibold">Yarn.ai</h2>
         <Button
           onClick={onNewSession}
-          variant="ghost"
-          size="icon"
-          className="h-8 w-8"
+          variant="default"
+          size="sm"
+          className="my-4 w-full"
         >
-          <PlusCircle className="h-5 w-5" />
-          <span className="sr-only">New session</span>
+          New Chat
         </Button>
       </div>
 
@@ -74,6 +76,15 @@ export function SessionSidebar({
           )}
         </div>
       </ScrollArea>
+
+      {/* Bottom section with theme toggle and user profile */}
+      <div className="mt-auto">
+        <Separator />
+        <div className="flex items-center gap-x-4 px-4 pt-4">
+          <UserProfile />
+          <ThemeToggle />
+        </div>
+      </div>
     </div>
   );
 }
