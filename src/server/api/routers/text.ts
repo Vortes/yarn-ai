@@ -47,7 +47,6 @@ export const textRouter = createTRPCRouter({
 
         // Create a structured prompt for the AI
         const prompt = `
-You are a skilled thought partner and insight facilitator. Your role is to help people organize their thoughts.
 
 Someone just shared this with you: "${input.text}".
         `;

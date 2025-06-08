@@ -28,7 +28,7 @@ export function ChatInput({ onSendMessage, disabled = false }: ChatInputProps) {
   };
 
   return (
-    <div className="bg-background mx-auto w-8/12 rounded-t-lg border p-4">
+    <div className="mx-auto w-8/12 rounded-t-lg border border-b-0 p-4 backdrop-blur-3xl">
       <div className="mx-auto flex max-w-4xl flex-col gap-4">
         {/* Input area */}
         <div className="flex items-end gap-2">

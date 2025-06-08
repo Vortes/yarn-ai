@@ -8,11 +8,9 @@ import {
   SessionSidebar,
   type ChatSession,
 } from "~/components/chat/session-sidebar";
-import { ChatMessage } from "~/components/chat/chat-message";
+import { ChatMessage } from "~/components/chat/ai-response-renderer";
 import { ChatInput } from "~/components/chat/chat-input";
-import { SessionCounter } from "~/components/ui/session-counter";
-import { ContentOutlineDisplay } from "./content-outline-display";
-import type { ContentOutline } from "./content-outline-display";
+import type { ContentOutline } from "./ai-response-renderer";
 import { toast } from "sonner";
 import { api } from "~/trpc/react";
 import { skipToken } from "@tanstack/react-query";
@@ -143,11 +141,6 @@ export function ChatContainer() {
     setStreamingText(message);
   };
 
-  // Outline generation - simplified
-  const handleGenerateOutline = async () => {
-    toast.error("Outline generation not yet implemented");
-  };
-
   return (
     <MainChatLayout
       sidebarContent={
@@ -160,7 +153,7 @@ export function ChatContainer() {
       }
     >
       {/* Chat messages area - takes remaining space */}
-      <ScrollArea className="min-h-0 flex-1">
+      <ScrollArea className="h-full flex-1">
         <div className="mx-auto max-w-4xl space-y-4 p-4">
           {messages.length === 0 ? (
             <div className="flex min-h-[400px] items-center justify-center">
@@ -189,31 +182,19 @@ export function ChatContainer() {
                   type="ai"
                   content={{ summary: streamingResponse }}
                   timestamp={new Date()}
-                  isStreaming={true}
                 />
               )}
             </>
           )}
         </div>
-      </ScrollArea>
-
-      {/* Outline display */}
-      {showOutline && outline && (
-        <div className="mx-auto max-w-4xl p-4">
-          <ContentOutlineDisplay
-            outline={outline}
-            onEdit={() => {
-              /* TODO: implement editing */
-            }}
-            onExport={(format) => alert(`Export as ${format}`)}
+        {/* Chat input area - always visible at bottom */}
+        <div className="absolute bottom-0 w-full">
+          <ChatInput
+            onSendMessage={handleSendMessage}
+            disabled={isProcessing}
           />
         </div>
-      )}
-
-      {/* Chat input area - always visible at bottom */}
-      <div className="flex-shrink-0">
-        <ChatInput onSendMessage={handleSendMessage} disabled={isProcessing} />
-      </div>
+      </ScrollArea>
     </MainChatLayout>
   );
 }

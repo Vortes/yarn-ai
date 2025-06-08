@@ -43,7 +43,7 @@ export function SessionSidebar({
       </div>
 
       <ScrollArea className="flex-1 px-2">
-        <div className="space-y-1 pb-4">
+        <div className="space-y-2 pb-4">
           {sessions.length > 0 ? (
             sessions.map((session) => (
               <Button
@@ -79,7 +79,6 @@ export function SessionSidebar({
 
       {/* Bottom section with theme toggle and user profile */}
       <div className="mt-auto">
-        <Separator />
         <div className="flex items-center gap-x-4 px-4 pt-4">
           <UserProfile />
           <ThemeToggle />
